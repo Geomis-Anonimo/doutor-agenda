@@ -1,14 +1,5 @@
 'use client';
 
-import { Button } from "@/components/ui/button"
-import {
-    Card,
-    CardContent,
-    CardDescription,
-    CardFooter,
-    CardHeader,
-    CardTitle,
-} from "@/components/ui/card"
 import {
     Tabs,
     TabsContent,
@@ -16,11 +7,9 @@ import {
     TabsTrigger,
 } from "@/components/ui/tabs"
 import SignUpForm from "@/app/authentication/components/sign-up-form";
-
-
+import LoginForm from "@/app/authentication/components/login-form";
 
 const AuthenticationPage = () => {
-
     return (
         <div className="flex h-screen w-screen items-center justify-center">
             <Tabs defaultValue="login" className="w-[400px]">
@@ -29,24 +18,10 @@ const AuthenticationPage = () => {
                 <TabsTrigger value="register">Criar conta</TabsTrigger>
                 </TabsList>
                 <TabsContent value="login">
-                <Card>
-
-                    <CardHeader>
-                    <CardTitle>Criar conta</CardTitle>
-                    <CardDescription>
-                        Crie uma conta para continuar
-                    </CardDescription>
-                    </CardHeader>
-                    <CardContent className="space-y-2">
-
-                    </CardContent>
-                    <CardFooter>
-                    <Button>Criar conta</Button>
-                    </CardFooter>
-                </Card>
+                    <LoginForm />
                 </TabsContent>
                 <TabsContent value="register">
-                    <SignUpForm/>
+                    <SignUpForm />
                 </TabsContent>
             </Tabs>
         </div>
