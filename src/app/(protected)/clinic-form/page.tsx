@@ -4,27 +4,26 @@ import {
   DialogDescription,
   DialogHeader,
   DialogTitle,
-} from "@/components/ui/dialog"
-import ClinicForm from "@/app/(protected)/clinic-form/_components/form";
+} from "@/components/ui/dialog";
+
+import ClinicForm from "./_components/form";
 
 const ClinicFormPage = () => {
-
   return (
-    <>
-      <Dialog open={true}>
-
+    <div>
+      <Dialog open>
         <DialogContent className="sm:max-w-[425px]">
           <DialogHeader>
             <DialogTitle>Adicionar clínica</DialogTitle>
             <DialogDescription>
-              Adicione uma clínica para continuar
+              Adicione uma clínica para continuar.
             </DialogDescription>
           </DialogHeader>
           <ClinicForm />
         </DialogContent>
       </Dialog>
-    </>
-  )
+    </div>
+  );
 };
 
 export default ClinicFormPage;

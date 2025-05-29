@@ -1,25 +1,38 @@
-'use client';
+"use client";
 
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
-import { z } from "zod";
-import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { authClient } from "@/lib/auth-client";
-import { useRouter } from "next/navigation";
 import { Loader2 } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { useForm } from "react-hook-form";
 import { toast } from "sonner";
+import { z } from "zod";
+
+import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { FormControl, FormMessage } from "@/components/ui/form";
+import { FormItem, FormLabel } from "@/components/ui/form";
+import { Form, FormField } from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import { authClient } from "@/lib/auth-client";
 
 const loginSchema = z.object({
   email: z
     .string()
     .trim()
-    .min(1, {message: "E-mail é obrigatório"})
-    .email({message: "Email é inválido"}),
-  password: z.string().trim().min(8, {message: "Senha deve ter pelo menos 8 caracteres"})
-})
+    .min(1, { message: "E-mail é obrigatório" })
+    .email({ message: "E-mail inválido" }),
+  password: z
+    .string()
+    .trim()
+    .min(8, { message: "A senha deve ter pelo menos 8 caracteres" }),
+});
 
 const LoginForm = () => {
   const router = useRouter();
@@ -29,36 +42,40 @@ const LoginForm = () => {
       email: "",
       password: "",
     },
-  })
+  });
 
-  const onSubmit = async (values: z.infer<typeof loginSchema>)=> {
-    await authClient.signIn.email({
-      email: values.email,
-      password: values.password,
-    }, {
-      onSuccess: () => {
-        router.push("/dashboard")
+  const handleSubmit = async (values: z.infer<typeof loginSchema>) => {
+    await authClient.signIn.email(
+      {
+        email: values.email,
+        password: values.password,
       },
-      onError: (error) => {
-        toast.error("E-mail ou senha inválidos.");
-      }
-    })
-  }
+      {
+        onSuccess: () => {
+          router.push("/dashboard");
+        },
+        onError: () => {
+          toast.error("E-mail ou senha inválidos.");
+        },
+      },
+    );
+  };
 
   const handleGoogleLogin = async () => {
     await authClient.signIn.social({
       provider: "google",
-      callbackURL: '/dashboard',
+      callbackURL: "/dashboard",
+      scopes: ["email", "profile"],
     });
-  }
+  };
 
   return (
     <Card>
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+        <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-4">
           <CardHeader>
             <CardTitle>Login</CardTitle>
-            <CardDescription>Faça login para continuar</CardDescription>
+            <CardDescription>Faça login para continuar.</CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
             <FormField
@@ -68,11 +85,7 @@ const LoginForm = () => {
                 <FormItem>
                   <FormLabel>E-mail</FormLabel>
                   <FormControl>
-                    <Input
-                      placeholder="Digite seu e-mail"
-                      {...field}
-                      autoComplete="email"  // Adicione esta linha
-                    />
+                    <Input placeholder="Digite seu e-mail" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -86,10 +99,9 @@ const LoginForm = () => {
                   <FormLabel>Senha</FormLabel>
                   <FormControl>
                     <Input
-                      type="password"
                       placeholder="Digite sua senha"
+                      type="password"
                       {...field}
-                      autoComplete="current-password"  // Adicione esta linha
                     />
                   </FormControl>
                   <FormMessage />
@@ -142,5 +154,6 @@ const LoginForm = () => {
       </Form>
     </Card>
   );
-}
+};
+
 export default LoginForm;
